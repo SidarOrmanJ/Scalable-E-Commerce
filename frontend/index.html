@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Commerce Microservices Control Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-decor-1"></div>
+    <div class="background-decor-2"></div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-logo">
+                <span class="logo-icon">⚡</span>
+                <h1>Scalable E-Commerce Backend Control</h1>
+            </div>
+            <p class="header-subtitle">Microservices Orchestration, Cache-Aside Caching, & Event-Driven Invoice Simulation</p>
+        </header>
+
+        <!-- Main Dashboard Layout -->
+        <div class="dashboard-grid">
+            
+            <!-- LEFT PANEL: Auth & Catalog -->
+            <div class="dashboard-col">
+                
+                <!-- Authentication Card -->
+                <section class="card glass-card" id="auth-card">
+                    <div class="card-header">
+                        <h2>🔑 User Authentication</h2>
+                        <span class="badge badge-inactive" id="auth-status">Not Logged In</span>
+                    </div>
+                    
+                    <div class="card-tabs">
+                        <button class="tab-btn active" onclick="switchAuthTab('login')">Login</button>
+                        <button class="tab-btn" onclick="switchAuthTab('register')">Register</button>
+                    </div>
+
+                    <!-- Login Form -->
+                    <div id="login-form-container">
+                        <div class="form-group">
+                            <label for="login-username">Username</label>
+                            <input type="text" id="login-username" placeholder="Enter username" value="sidar">
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">Password</label>
+                            <input type="password" id="login-password" placeholder="Enter password" value="securepassword123">
+                        </div>
+                        <button class="btn btn-primary" onclick="handleLogin()">Login to System</button>
+                    </div>
+
+                    <!-- Register Form -->
+                    <div id="register-form-container" class="hidden">
+                        <div class="form-group">
+                            <label for="reg-username">Username</label>
+                            <input type="text" id="reg-username" placeholder="Username (min 3 chars)">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-email">Email Address</label>
+                            <input type="email" id="reg-email" placeholder="example@domain.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="reg-password">Password</label>
+                            <input type="password" id="reg-password" placeholder="Password (min 6 chars)">
+                        </div>
+                        <button class="btn btn-secondary" onclick="handleRegister()">Register Account</button>
+                    </div>
+
+                    <div class="auth-meta hidden" id="auth-meta">
+                        <div class="meta-row">
+                            <span>Logged User:</span>
+                            <strong id="meta-username">-</strong>
+                        </div>
+                        <div class="meta-row">
+                            <span>Role scope:</span>
+                            <strong class="text-accent" id="meta-role">-</strong>
+                        </div>
+                        <div class="meta-row token-row">
+                            <span>JWT Bearer:</span>
+                            <code id="meta-token">-</code>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Product Catalog Card -->
+                <section class="card glass-card" id="catalog-card">
+                    <div class="card-header">
+                        <h2>📦 Product Catalog & Redis Cache</h2>
+                        <button class="btn btn-sm btn-icon" onclick="fetchProducts()" title="Refresh Catalog">🔄</button>
+                    </div>
+
+                    <!-- Add/Seed Product -->
+                    <div class="accordion-section">
+                        <h3>Seed New Product</h3>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="prod-id">Product ID</label>
+                                <input type="text" id="prod-id" placeholder="e.g. PROD-100" value="PROD-100">
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-name">Name</label>
+                                <input type="text" id="prod-name" placeholder="PlayStation 5" value="PlayStation 5">
+                            </div>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="prod-price">Price ($)</label>
+                                <input type="number" id="prod-price" placeholder="499.99" step="0.01" value="499.99">
+                            </div>
+                            <div class="form-group">
+                                <label for="prod-qty">Stock Qty</label>
+                                <input type="number" id="prod-qty" placeholder="10" value="10">
+                            </div>
+                        </div>
+                        <button class="btn btn-secondary" onclick="handleSeedProduct()">Create / Seed Product</button>
+                    </div>
+
+                    <!-- Products List Table -->
+                    <div class="products-list-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Product Name</th>
+                                    <th>Price</th>
+                                    <th>Stock</th>
+                                    <th>Cache Latency</th>
+                                </tr>
+                            </thead>
+                            <tbody id="products-table-body">
+                                <tr>
+                                    <td colspan="5" class="text-center">No products seeded. Click refresh to query backend.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- RIGHT PANEL: Checkout & Orders & Invoices -->
+            <div class="dashboard-col">
+                
+                <!-- Checkout Workspace -->
+                <section class="card glass-card" id="checkout-card">
+                    <div class="card-header">
+                        <h2>🛒 Checkout Desk (gRPC & Sagas)</h2>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="form-group">
+                            <label for="check-prod-id">Target Product ID</label>
+                            <input type="text" id="check-prod-id" placeholder="PROD-100" value="PROD-100">
+                        </div>
+                        <div class="form-group">
+                            <label for="check-prod-qty">Quantity</label>
+                            <input type="number" id="check-prod-qty" placeholder="2" value="2" min="1">
+                        </div>
+                    </div>
+
+                    <div class="accordion-section">
+                        <h3>Simulated Card Information</h3>
+                        <div class="form-group">
+                            <label for="card-number">Credit Card Number</label>
+                            <input type="text" id="card-number" placeholder="5123 4567 8901 2345" value="5123456789012345">
+                            <small class="form-tip">Cards starting with <strong class="text-danger">4000</strong> trigger a payment decline & gRPC release rollback flow.</small>
+                        </div>
+                        <div class="grid-2">
+                            <div class="form-group">
+                                <label for="card-expiry">Expiry Date</label>
+                                <input type="text" id="card-expiry" placeholder="12/28" value="12/28">
+                            </div>
+                            <div class="form-group">
+                                <label for="card-cvv">CVV</label>
+                                <input type="text" id="card-cvv" placeholder="123" value="123">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn btn-primary btn-lg" onclick="handleCheckout()">
+                        <span>🚀 Submit Order (Orchestrate Saga)</span>
+                    </button>
+                </section>
+
+                <!-- Placed Orders Status -->
+                <section class="card glass-card" id="orders-card">
+                    <div class="card-header">
+                        <h2>📋 Placed Orders History</h2>
+                        <button class="btn btn-sm btn-icon" onclick="fetchOrders()" title="Refresh Orders">🔄</button>
+                    </div>
+
+                    <div class="orders-list-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Order ID</th>
+                                    <th>User</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Invoice</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                <tr>
+                                    <td colspan="5" class="text-center">No transactions recorded. Submit an order above!</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+        </div>
+
+        <!-- LOWER SECTION: Logs Console & Invoice Previewer -->
+        <div class="dashboard-grid grid-bottom">
+            
+            <!-- Live Logs Console -->
+            <section class="card glass-card panel-half" id="console-card">
+                <div class="card-header">
+                    <h2>🖥️ Gateway API Activity Logs</h2>
+                    <button class="btn btn-sm btn-secondary" onclick="clearLogs()">Clear Console</button>
+                </div>
+                <div class="console-body" id="console-log-panel">
+                    <div class="console-line system-line">[SYSTEM] Ready. API requests will stream here. Gateway target: http://localhost:8080</div>
+                </div>
+            </section>
+
+            <!-- Invoice Content Preview -->
+            <section class="card glass-card panel-half" id="invoice-preview-card">
+                <div class="card-header">
+                    <h2>📄 AWS S3 LocalStack Invoice Viewer</h2>
+                    <span class="badge badge-inactive" id="invoice-status">No Invoice Selected</span>
+                </div>
+                <div class="invoice-body">
+                    <pre class="invoice-display" id="invoice-display-box">Select an order that is PAID and click 'View Invoice' to download invoice details directly from LocalStack S3 bucket...</pre>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

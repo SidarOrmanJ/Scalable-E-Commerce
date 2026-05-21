@@ -1,0 +1,9 @@
+rootProject.name = 'scalable-ecommerce-backend'
+
+include 'common-proto'
+include 'gateway-service'
+include 'user-service'
+include 'stock-service'
+include 'order-service'
+include 'payment-service'
+include 'notification-service'

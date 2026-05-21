@@ -1,0 +1,27 @@
+server:
+  port: 8083
+
+grpc:
+  server:
+    port: 9090
+
+spring:
+  application:
+    name: stock-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/stock_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      time-to-live-seconds: 600

@@ -1,0 +1,40 @@
+# Gradle
+.gradle/
+.gradle-dist/
+build/
+bin/
+out/
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Heap dumps / logs
+*.hprof*
+*.log
+
+# Local environment / secrets
+.env
+.env.*
+.env.local
+
+# Docker & local storage
+postgres-data/
+localstack-data/
+
+# Frontend dependencies
+node_modules/
+dist/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

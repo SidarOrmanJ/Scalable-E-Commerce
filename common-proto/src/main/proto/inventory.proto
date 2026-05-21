@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package com.sidarorman.ecommerce.grpc;
+
+option java_multiple_files = true;
+option java_package = "com.sidarorman.ecommerce.grpc";
+
+service InventoryService {
+  rpc CheckAndDeductStock (DeductStockRequest) returns (DeductStockResponse);
+  rpc ReleaseStock (ReleaseStockRequest) returns (ReleaseStockResponse);
+}
+
+message DeductStockRequest {
+  repeated OrderItem items = 1;
+}
+
+message OrderItem {
+  string productId = 1;
+  int32 quantity = 2;
+}
+
+message DeductStockResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReleaseStockRequest {
+  repeated OrderItem items = 1;
+}
+
+message ReleaseStockResponse {
+  bool success = 1;
+  string message = 2;
+}

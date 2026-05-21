@@ -1,0 +1,39 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: order-service
+  datasource:
+    url: jdbc:postgresql://localhost:5433/order_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.type.mapping: "orderPlacedEvent:com.sidarorman.ecommerce.order.event.OrderPlacedEvent"
+
+grpc:
+  stock-service:
+    host: localhost
+    port: 9090
+
+services:
+  payment:
+    url: "http://localhost:8084"
+  stock:
+    url: "http://localhost:8083"
+
+jwt:
+  secret: "9a4f2c8d3b7a1e5f8g9h0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f"
