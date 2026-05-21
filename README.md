@@ -152,24 +152,6 @@ Make sure you have the following installed on your machine:
 
 ---
 
-## 🧪 Testing and Verification
-
-### Automated E2E Test Suite
-The project contains an automated end-to-end integration test script that performs:
-1. User registration & login (JWT generation)
-2. Catalog product seeding
-3. Latency comparisons (Redis cache hit/miss checks)
-4. SAGA Happy Path Checkout (invoking gRPC stock reservation, HTTP payments, Kafka event generation, and LocalStack S3 invoice verification)
-5. SAGA Rollback Execution (forcing payment failures and validating inventory restoration)
-
-To run the E2E verification test:
-```powershell
-powershell -ExecutionPolicy Bypass -File "C:/Users/ADMIN/.gemini/antigravity-ide/brain/fa5cd859-72a3-44dd-8b27-3e3f3dbf4486/scratch/test-e2e.ps1"
-```
-*(Make sure to adjust the test script path to point to your local test suite if running outside workspace directories)*
-
----
-
 ## 🛠️ Technical Stack & Dependencies
 
 - **Framework**: Spring Boot 3.2.x, Spring Cloud Gateway
