@@ -135,13 +135,20 @@ Make sure you have the following installed on your machine:
    cd Scalable-E-Commerce
    ```
 
-2. **Launch Infrastructure & Services:**
+2. **Configure Environment Variables:**
+   Copy the environment variables template and configure your secrets (JWT, Database, etc.).
+   ```bash
+   cp .env.example .env
+   ```
+   *(Ensure you open `.env` and set `JWT_SECRET` and `DB_PASSWORD` before proceeding).*
+
+3. **Launch Infrastructure & Services:**
    We provide a fully-automated startup script `run-all.ps1` which starts the backing services in Docker Compose (PostgreSQL, Kafka, Redis, LocalStack) and spins up all 6 backend services and the frontend Node.js server in separate, named terminal windows.
    ```powershell
    .\run-all.ps1
    ```
 
-3. **Verify the Services are Running:**
+4. **Verify the Services are Running:**
    - Gateway API: `http://localhost:8080`
    - Frontend Control Panel: `http://localhost:3000`
    - LocalStack Dashboard: `http://localhost:4566`
@@ -149,12 +156,13 @@ Make sure you have the following installed on your machine:
      - User Service: `http://localhost:8081/swagger-ui.html`
      - Stock Service: `http://localhost:8083/swagger-ui.html`
      - Order Service: `http://localhost:8082/swagger-ui.html`
+     - Payment Service: `http://localhost:8084/swagger-ui.html`
 
 ---
 
 ## 🛠️ Technical Stack & Dependencies
 
-- **Framework**: Spring Boot 3.2.x, Spring Cloud Gateway
+- **Framework**: Spring Boot 3.3.x, Spring Cloud Gateway
 - **Build Tool**: Gradle Multi-Module Build
 - **Databases**: PostgreSQL (Relational Storage), Redis (Caching)
 - **Messaging**: Apache Kafka (Event-Driven Broker)
