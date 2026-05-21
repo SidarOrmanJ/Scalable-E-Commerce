@@ -23,10 +23,7 @@ public class InventoryServiceImpl extends InventoryServiceGrpc.InventoryServiceI
     public void checkAndDeductStock(DeductStockRequest request, StreamObserver<DeductStockResponse> responseObserver) {
         log.info("Received gRPC request to deduct stock for {} items", request.getItemsCount());
         try {
-            // Deduct stock for all items
-            for (OrderItem item : request.getItemsList()) {
-                productService.deductStockWithLock(item.getProductId(), item.getQuantity());
-            }
+            productService.deductStockWithLockBulk(request.getItemsList());
 
             DeductStockResponse response = DeductStockResponse.newBuilder()
                     .setSuccess(true)
@@ -50,10 +47,7 @@ public class InventoryServiceImpl extends InventoryServiceGrpc.InventoryServiceI
     public void releaseStock(ReleaseStockRequest request, StreamObserver<ReleaseStockResponse> responseObserver) {
         log.info("Received gRPC request to release stock for {} items", request.getItemsCount());
         try {
-            // Release stock for all items
-            for (OrderItem item : request.getItemsList()) {
-                productService.releaseStockWithLock(item.getProductId(), item.getQuantity());
-            }
+            productService.releaseStockWithLockBulk(request.getItemsList());
 
             ReleaseStockResponse response = ReleaseStockResponse.newBuilder()
                     .setSuccess(true)

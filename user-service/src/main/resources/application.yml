@@ -7,7 +7,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5433/user_db
     username: postgres
-    password: postgres
+    password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -18,5 +18,5 @@ spring:
         format_sql: true
 
 jwt:
-  secret: "9a4f2c8d3b7a1e5f8g9h0j1k2l3m4n5o6p7q8r9s0t1u2v3w4x5y6z7a8b9c0d1e2f" # Safe HMAC SHA-256 secret (64 characters hex)
+  secret: "${JWT_SECRET}"
   expiration-ms: 86400000 # 24 hours

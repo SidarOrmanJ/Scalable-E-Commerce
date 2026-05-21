@@ -11,6 +11,6 @@ aws:
   s3:
     endpoint: http://localhost:4566
     bucket-name: ecommerce-invoices
-    access-key: test
-    secret-key: test
+    access-key: ${AWS_ACCESS_KEY:test}
+    secret-key: ${AWS_SECRET_KEY:test}
     region: us-east-1
